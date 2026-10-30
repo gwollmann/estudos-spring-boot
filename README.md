@@ -8,7 +8,7 @@ A aplicação segue uma organização por camadas sob `com.example.people`. A cl
 
 - `controller`: endpoints REST de pessoas.
 - `dto`: objetos de entrada e saída da API.
-- `entity`: entidade JPA `Pessoa`.
+- `entity`: entidade JPA `Pessoa` e entidade `Endereco`.
 - `repository`: acesso aos dados com Spring Data JPA.
 - `service`: regras de negócio e operações de pessoas.
 
@@ -43,6 +43,14 @@ curl -i -X POST http://localhost:8080/api/pessoas \
   -d '{"nome":"Ana Silva","email":"ana@example.com"}'
 ```
 
+O cadastro também aceita o CPF e uma lista opcional de endereços. Cada endereço contém descrição e CEP:
+
+```bash
+curl -i -X POST http://localhost:8080/api/pessoas \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Ana Silva","email":"ana@example.com","cpf":"12345678901","enderecos":[{"endereco":"Rua das Flores, 10","cep":"01001000"},{"endereco":"Av. Brasil, 20","cep":"01001000"}]}'
+```
+
 A resposta tem status `201 Created` e inclui o ID gerado. Consulte todas as pessoas:
 
 ```bash
@@ -61,7 +69,13 @@ Busque pessoas pelo e-mail (a busca é exata e pode retornar mais de um resultad
 curl --get --data-urlencode "email=ana@example.com" http://localhost:8080/api/pessoas
 ```
 
-O cadastro exige nome não vazio e e-mail válido. Um ID inexistente retorna `404 Not Found`; um e-mail sem correspondências retorna uma lista vazia.
+Busque pessoas pelo CEP:
+
+```bash
+curl --get --data-urlencode "cep=01001000" http://localhost:8080/api/pessoas
+```
+
+O cadastro exige nome não vazio e e-mail válido. CPF e a lista de endereços são opcionais; cada endereço informado exige descrição e CEP. Uma pessoa pode ter vários endereços. Um ID inexistente retorna `404 Not Found`; buscas sem correspondências retornam uma lista vazia.
 
 ## Testes
 
