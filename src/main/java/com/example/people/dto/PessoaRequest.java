@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 
 public record PessoaRequest(
 	@NotBlank String nome,
-	@NotBlank @Email String email
+	@NotBlank @Email String email,
+	String cpf,
+	String endereco,
+	String cep
 ) {
 }

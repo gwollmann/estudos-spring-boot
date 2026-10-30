@@ -21,12 +21,21 @@ public class Pessoa {
 	@Column(nullable = false)
 	private String email;
 
+	private String cpf;
+
+	private String endereco;
+
+	private String cep;
+
 	protected Pessoa() {
 	}
 
-	public Pessoa(String nome, String email) {
+	public Pessoa(String nome, String email, String cpf, String endereco, String cep) {
 		this.nome = nome;
 		this.email = email;
+		this.cpf = cpf;
+		this.endereco = endereco;
+		this.cep = cep;
 	}
 
 	public Long getId() {
@@ -39,5 +48,17 @@ public class Pessoa {
 
 	public String getEmail() {
 		return email;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public String getCep() {
+		return cep;
 	}
 }

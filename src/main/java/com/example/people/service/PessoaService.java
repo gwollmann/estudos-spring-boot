@@ -20,7 +20,13 @@ public class PessoaService {
 	}
 
 	public PessoaResponse criar(PessoaRequest request) {
-		Pessoa pessoa = repository.save(new Pessoa(request.nome(), request.email()));
+		Pessoa pessoa = repository.save(new Pessoa(
+			request.nome(),
+			request.email(),
+			request.cpf(),
+			request.endereco(),
+			request.cep()
+		));
 		return PessoaResponse.from(pessoa);
 	}
 
@@ -32,6 +38,12 @@ public class PessoaService {
 
 	public List<PessoaResponse> buscarPorEmail(String email) {
 		return repository.findAllByEmail(email).stream()
+			.map(PessoaResponse::from)
+			.toList();
+	}
+
+	public List<PessoaResponse> buscarPorCep(String cep) {
+		return repository.findAllByCep(cep).stream()
 			.map(PessoaResponse::from)
 			.toList();
 	}
