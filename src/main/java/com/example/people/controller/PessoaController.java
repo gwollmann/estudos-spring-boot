@@ -37,9 +37,14 @@ public class PessoaController {
 		return service.listar();
 	}
 
-	@GetMapping(params = "email")
+	@GetMapping(params = {"email", "!cep"})
 	public List<PessoaResponse> buscarPorEmail(@RequestParam String email) {
 		return service.buscarPorEmail(email);
+	}
+
+	@GetMapping(params = {"cep", "!email"})
+	public List<PessoaResponse> buscarPorCep(@RequestParam String cep) {
+		return service.buscarPorCep(cep);
 	}
 
 	@GetMapping("/{id}")
