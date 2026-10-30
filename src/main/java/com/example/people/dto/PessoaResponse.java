@@ -1,8 +1,10 @@
 package com.example.people.dto;
 
+import java.util.List;
+
 import com.example.people.entity.Pessoa;
 
-public record PessoaResponse(Long id, String nome, String email, String cpf, String endereco, String cep) {
+public record PessoaResponse(Long id, String nome, String email, String cpf, List<EnderecoResponse> enderecos) {
 
 	public static PessoaResponse from(Pessoa pessoa) {
 		return new PessoaResponse(
@@ -10,8 +12,9 @@ public record PessoaResponse(Long id, String nome, String email, String cpf, Str
 			pessoa.getNome(),
 			pessoa.getEmail(),
 			pessoa.getCpf(),
-			pessoa.getEndereco(),
-			pessoa.getCep()
+			pessoa.getEnderecos().stream()
+				.map(EnderecoResponse::from)
+				.toList()
 		);
 	}
 }

@@ -1,10 +1,15 @@
 package com.example.people.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,19 +28,16 @@ public class Pessoa {
 
 	private String cpf;
 
-	private String endereco;
-
-	private String cep;
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Endereco> enderecos = new ArrayList<>();
 
 	protected Pessoa() {
 	}
 
-	public Pessoa(String nome, String email, String cpf, String endereco, String cep) {
+	public Pessoa(String nome, String email, String cpf) {
 		this.nome = nome;
 		this.email = email;
 		this.cpf = cpf;
-		this.endereco = endereco;
-		this.cep = cep;
 	}
 
 	public Long getId() {
@@ -54,11 +56,12 @@ public class Pessoa {
 		return cpf;
 	}
 
-	public String getEndereco() {
-		return endereco;
+	public List<Endereco> getEnderecos() {
+		return enderecos;
 	}
 
-	public String getCep() {
-		return cep;
+	public void adicionarEndereco(Endereco endereco) {
+		enderecos.add(endereco);
+		endereco.setPessoa(this);
 	}
 }

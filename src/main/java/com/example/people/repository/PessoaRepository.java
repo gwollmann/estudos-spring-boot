@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
 	List<Pessoa> findAllByEmail(String email);
-	List<Pessoa> findAllByCep(String cep);
+	List<Pessoa> findDistinctByEnderecos_Cep(String cep);
 }

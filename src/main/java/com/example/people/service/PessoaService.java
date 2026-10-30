@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.people.dto.PessoaRequest;
 import com.example.people.dto.PessoaResponse;
+import com.example.people.entity.Endereco;
 import com.example.people.entity.Pessoa;
 import com.example.people.repository.PessoaRepository;
 import org.springframework.http.HttpStatus;
@@ -20,13 +21,11 @@ public class PessoaService {
 	}
 
 	public PessoaResponse criar(PessoaRequest request) {
-		Pessoa pessoa = repository.save(new Pessoa(
-			request.nome(),
-			request.email(),
-			request.cpf(),
-			request.endereco(),
-			request.cep()
-		));
+		Pessoa pessoa = new Pessoa(request.nome(), request.email(), request.cpf());
+		request.enderecos().stream()
+			.map(endereco -> new Endereco(endereco.endereco(), endereco.cep()))
+			.forEach(pessoa::adicionarEndereco);
+		pessoa = repository.save(pessoa);
 		return PessoaResponse.from(pessoa);
 	}
 
@@ -43,7 +42,7 @@ public class PessoaService {
 	}
 
 	public List<PessoaResponse> buscarPorCep(String cep) {
-		return repository.findAllByCep(cep).stream()
+		return repository.findDistinctByEnderecos_Cep(cep).stream()
 			.map(PessoaResponse::from)
 			.toList();
 	}

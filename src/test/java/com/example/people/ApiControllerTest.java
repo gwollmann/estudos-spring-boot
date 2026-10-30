@@ -39,16 +39,19 @@ class ApiControllerTest {
 		String response = mockMvc.perform(post("/api/pessoas")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{\"nome\":\"Ana Silva\",\"email\":\"ana@example.com\","
-					+ "\"cpf\":\"12345678901\",\"endereco\":\"Rua das Flores, 10\","
-					+ "\"cep\":\"01001000\"}"))
+					+ "\"cpf\":\"12345678901\",\"enderecos\":["
+					+ "{\"endereco\":\"Rua das Flores, 10\",\"cep\":\"01001000\"},"
+					+ "{\"endereco\":\"Av. Brasil, 20\",\"cep\":\"01001000\"}]}"))
 			.andExpect(status().isCreated())
 			.andExpect(header().string("Location", org.hamcrest.Matchers.startsWith("/api/pessoas/")))
 			.andExpect(jsonPath("$.id").isNumber())
 			.andExpect(jsonPath("$.nome").value("Ana Silva"))
 			.andExpect(jsonPath("$.email").value("ana@example.com"))
 			.andExpect(jsonPath("$.cpf").value("12345678901"))
-			.andExpect(jsonPath("$.endereco").value("Rua das Flores, 10"))
-			.andExpect(jsonPath("$.cep").value("01001000"))
+			.andExpect(jsonPath("$.enderecos").isArray())
+			.andExpect(jsonPath("$.enderecos.length()").value(2))
+			.andExpect(jsonPath("$.enderecos[0].endereco").value("Rua das Flores, 10"))
+			.andExpect(jsonPath("$.enderecos[0].cep").value("01001000"))
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
@@ -67,8 +70,9 @@ class ApiControllerTest {
 
 		mockMvc.perform(get("/api/pessoas").param("cep", "01001000"))
 			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.length()").value(1))
 			.andExpect(jsonPath("$[0].id").value(id))
-			.andExpect(jsonPath("$[0].cep").value("01001000"));
+			.andExpect(jsonPath("$[0].enderecos.length()").value(2));
 
 		mockMvc.perform(get("/api/pessoas/{id}", id))
 			.andExpect(status().isOk())
@@ -88,6 +92,15 @@ class ApiControllerTest {
 		mockMvc.perform(get("/api/pessoas").param("cep", "99999999"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$").isEmpty());
+	}
+
+	@Test
+	void acceptsPersonWithoutAddresses() throws Exception {
+		mockMvc.perform(post("/api/pessoas")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"nome\":\"João Silva\",\"email\":\"joao@example.com\"}"))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.enderecos").isEmpty());
 	}
 
 	@Test
