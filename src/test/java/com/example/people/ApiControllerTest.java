@@ -1,7 +1,7 @@
 package com.example.people;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.example.people.repository.PessoaRepository;
+import com.example.people.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +24,14 @@ class ApiControllerTest {
 	private MockMvc mockMvc;
 
 	@Autowired
-	private PessoaRepository pessoaRepository;
+	private PersonRepository personRepository;
 
 	@Autowired
 	private ObjectMapper objectMapper;
 
 	@BeforeEach
-	void limparPessoas() {
-		pessoaRepository.deleteAll();
+	void cleanPeople() {
+		personRepository.deleteAll();
 	}
 
 	@Test
@@ -108,9 +108,16 @@ class ApiControllerTest {
 		mockMvc.perform(post("/api/pessoas")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{\"nome\":\"\",\"email\":\"inválido\"}"))
-			.andExpect(status().isBadRequest());
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.status").value(400))
+			.andExpect(jsonPath("$.path").value("/api/pessoas"))
+			.andExpect(jsonPath("$.validationErrors.name").exists())
+			.andExpect(jsonPath("$.validationErrors.email").exists());
 
 		mockMvc.perform(get("/api/pessoas/999"))
-			.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.status").value(404))
+			.andExpect(jsonPath("$.error").value("Not Found"))
+			.andExpect(jsonPath("$.path").value("/api/pessoas/999"));
 	}
 }

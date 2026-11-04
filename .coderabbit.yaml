@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+
+language: "pt-BR"
+
+reviews:
+  auto_review:
+    enabled: true
+  path_instructions:
+    - path: "**/*.java"
+      instructions: |
+        Revise o código conforme as diretrizes em
+        .github/copilot-instructions.md e .github/agents/spring111.agent.md.
+        Verifique nomes de classes, métodos e variáveis em inglês; camadas
+        Controller -> Service -> Repository; injeção por construtor; DTOs
+        sem exposição de entidades JPA; validação Jakarta; tratamento
+        centralizado de erros; transações na camada de service; e testes
+        relevantes. Preserve os nomes em português do contrato HTTP público,
+        como rotas e campos JSON.
+    - path: "src/main/resources/db/migration/**"
+      instructions: |
+        Revise migrations Flyway quanto à compatibilidade com PostgreSQL,
+        constraints de integridade, segurança de dados existentes e
+        consistência com as entidades JPA. Migrations já aplicadas não devem
+        ser alteradas retroativamente.
+    - path: "src/test/**"
+      instructions: |
+        Verifique se os testes cobrem os contratos HTTP, validações,
+        tratamento de erros e comportamento de persistência afetados pelas
+        mudanças. Não presuma que H2 reproduz todos os comportamentos do
+        PostgreSQL em alterações específicas do banco.
+    - path: "pom.xml"
+      instructions: |
+        Confirme compatibilidade com Java 25 e Spring Boot 3.5.x. Evite
+        dependências duplicadas ou desnecessárias e mantenha drivers de banco
+        com escopos adequados.
