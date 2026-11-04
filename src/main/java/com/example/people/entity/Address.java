@@ -12,47 +12,47 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "enderecos")
-public class Endereco {
+public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private String endereco;
+	@Column(name = "endereco", nullable = false)
+	private String streetAddress;
 
-	@Column(nullable = false)
-	private String cep;
+	@Column(name = "cep", nullable = false)
+	private String postalCode;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "pessoa_id", nullable = false)
-	private Pessoa pessoa;
+	private Person person;
 
-	protected Endereco() {
+	protected Address() {
 	}
 
-	public Endereco(String endereco, String cep) {
-		this.endereco = endereco;
-		this.cep = cep;
+	public Address(String streetAddress, String postalCode) {
+		this.streetAddress = streetAddress;
+		this.postalCode = postalCode;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getEndereco() {
-		return endereco;
+	public String getStreetAddress() {
+		return streetAddress;
 	}
 
-	public String getCep() {
-		return cep;
+	public String getPostalCode() {
+		return postalCode;
 	}
 
-	public Pessoa getPessoa() {
-		return pessoa;
+	public Person getPerson() {
+		return person;
 	}
 
-	void setPessoa(Pessoa pessoa) {
-		this.pessoa = pessoa;
+	void setPerson(Person person) {
+		this.person = person;
 	}
 }

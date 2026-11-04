@@ -14,54 +14,55 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "pessoas")
-public class Pessoa {
+public class Person {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private String nome;
+	@Column(name = "nome", nullable = false)
+	private String name;
 
 	@Column(nullable = false)
 	private String email;
 
-	private String cpf;
+	@Column(name = "cpf")
+	private String taxId;
 
-	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Endereco> enderecos = new ArrayList<>();
+	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Address> addresses = new ArrayList<>();
 
-	protected Pessoa() {
+	protected Person() {
 	}
 
-	public Pessoa(String nome, String email, String cpf) {
-		this.nome = nome;
+	public Person(String name, String email, String taxId) {
+		this.name = name;
 		this.email = email;
-		this.cpf = cpf;
+		this.taxId = taxId;
 	}
 
 	public Long getId() {
 		return id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public String getCpf() {
-		return cpf;
+	public String getTaxId() {
+		return taxId;
 	}
 
-	public List<Endereco> getEnderecos() {
-		return enderecos;
+	public List<Address> getAddresses() {
+		return addresses;
 	}
 
-	public void adicionarEndereco(Endereco endereco) {
-		enderecos.add(endereco);
-		endereco.setPessoa(this);
+	public void addAddress(Address address) {
+		addresses.add(address);
+		address.setPerson(this);
 	}
 }

@@ -8,7 +8,7 @@ A aplicação segue uma organização por camadas sob `com.example.people`. A cl
 
 - `controller`: endpoints REST de pessoas.
 - `dto`: objetos de entrada e saída da API.
-- `entity`: entidade JPA `Pessoa` e entidade `Endereco`.
+- `entity`: entidades JPA `Person` e `Address`.
 - `repository`: acesso aos dados com Spring Data JPA.
 - `service`: regras de negócio e operações de pessoas.
 
@@ -25,9 +25,13 @@ docker compose up -d
 
 O banco fica disponível em `localhost:5434`, no database `pessoas_db`, com o usuário `pessoas`. A aplicação e o Docker Compose usam `DATABASE_PASSWORD`; configure essa variável no ambiente antes de iniciar os serviços. Não compartilhe nem versione a senha.
 
+As alterações do schema são aplicadas por migrations Flyway em `src/main/resources/db/migration`. O Hibernate valida o schema na inicialização e não o altera automaticamente.
+
+Se o banco local já foi criado pelo Hibernate antes da adoção do Flyway, confira se ele contém as tabelas `pessoas` e `enderecos` com as colunas e constraints esperadas pela migration inicial. Para registrar esse schema existente como baseline uma única vez, inicie a aplicação com `FLYWAY_BASELINE_ON_MIGRATE=true`; depois, remova essa variável. Bancos novos não precisam desse passo.
+
 ## Executar a aplicação
 
-Requer Java 17 ou superior e Maven.
+Requer Java 25 (LTS) ou superior e Maven.
 
 ```bash
 mvn spring-boot:run

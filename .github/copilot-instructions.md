@@ -1,8 +1,22 @@
 # Diretrizes do projeto
 
+# Instruções Específicas para o GitHub Copilot (Java/Spring Boot)
+
+## 🧠 Alinhamento de Contexto
+- **Agente do projeto:** Quando o agente `spring111` estiver selecionado, siga também as regras de arquitetura, camadas e persistência definidas em `.github/agents/spring111.agent.md`. Estas instruções gerais continuam válidas para todos os agentes.
+
+## 💬 Comportamento de Geração de Código no VS Code
+- **Idioma:** Escreva os comentários do código e as respostas do chat em português (pt-BR). Os nomes de classes, métodos e variáveis devem ser estritamente em inglês.
+- **Padrão de Nomenclatura:** Siga o padrão camelCase para métodos/variáveis e PascalCase para classes Java.
+- **Evite Código Verboso:** Use Lombok quando já fizer parte do projeto e estiver alinhado ao código existente. Não adicione a dependência apenas para reduzir boilerplate; mantenha a injeção por construtor.
+- **Tratamento de Stream API:** Sempre que lidar com coleções/listas em Java 8+, utilize a Stream API de forma legível e idiomática.
+- **Geração de Testes:** Sempre que solicitado a criar um método de negócio, inclua uma sugestão de teste unitário utilizando **JUnit 5** e **Mockito** (`@Mock`, `@InjectMocks`).
+
+
+
 ## Stack e organização
 
-- Mantenha a compatibilidade com Java 17, Spring Boot 3.5.x e Maven, conforme `pom.xml`.
+- Mantenha a compatibilidade com Java 25, Spring Boot 3.5.x e Maven, conforme `pom.xml`.
 - Preserve a organização por camadas em `com.example.people`: controllers para HTTP, DTOs para entrada e saída, services para regras de negócio, repositories para acesso a dados e entities para persistência.
 - Siga o estilo já usado no projeto; mantenha entidades fora da resposta da API e converta-as para DTOs.
 - Use injeção por construtor e os recursos de Jakarta/Spring já adotados. Evite adicionar dependências sem necessidade.
